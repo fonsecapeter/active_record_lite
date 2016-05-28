@@ -10,6 +10,10 @@ class String
     self.to_camel.singlize
   end
 
+  def constantize
+    Object.const_get(self)
+  end
+
   # takes string in camel case and converts to snake case
   def to_snake
     words = self
@@ -33,7 +37,7 @@ class String
 
   # takes string and removes trailing `s`, can refine later...
   def singlize
-    self[-1] == "s" ? self[0..-1] : self
+    self[-1] == "s" ? self[0...-1] : self
   end
 
 end
