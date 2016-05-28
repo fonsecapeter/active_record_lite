@@ -1,5 +1,6 @@
 require_relative '02_searchable'
-require 'active_support/inflector'
+# require 'active_support/inflector'
+require_relative 'monkeypatches/tablisms'
 
 # Phase IIIa
 class AssocOptions
@@ -20,7 +21,9 @@ end
 
 class BelongsToOptions < AssocOptions
   def initialize(name, options = {})
-    # ...
+    @primary_key = options[:primary_key] || 'id'
+    @foreign_key = options[:foreign_key] || "#{options[:class_name].downcase}_id"
+    @class_name = options[:class_name]
   end
 end
 
