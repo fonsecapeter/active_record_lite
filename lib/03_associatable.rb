@@ -30,7 +30,7 @@ end
 class HasManyOptions < AssocOptions
   def initialize(name, self_class_name, options = {})
     @primary_key = options[:primary_key] || :id
-    @foreign_key = options[:foreign_key] || "#{self_class_name.downcase}_id".to_sym
+    @foreign_key = options[:foreign_key] || "#{self_class_name.to_snake}_id".to_sym
     @class_name = options[:class_name] || name.to_s.classize
   end
 end
@@ -49,13 +49,24 @@ module Associatable
   end
 
   def has_many(name, options = {})
-    self.assoc_options[name] = HasManyOptions.new(name, self.class.name, options)
+    self.assoc_options[name] = HasManyOptions.new(name, self.name, options)
 
     define_method(name) do
       options = self.class.assoc_options[name]
 
       key_val = self.send(options.primary_key)
       options.model_class.where(options.foreign_key => key_val)
+    end
+  end
+
+  def has_one(name, options = {})
+    self.assoc_options[name] = HasManyOptions.new(name, self.name, options)
+
+    define_method(name) do
+      options = self.class.assoc_options[name]
+
+      key_val = self.send(options.primary_key)
+      options.model_class.where(options.foreign_key => key_val).first
     end
   end
 

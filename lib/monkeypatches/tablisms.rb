@@ -32,12 +32,20 @@ class String
 
   # takes string and adds trailing `s`, can refine later...
   def pluralize
-    self[-1] == "s" ? "#{self}es" : "#{self}s"
+    self[-1] == 's' ? "#{self}es" : "#{self}s"
   end
 
   # takes string and removes trailing `s`, can refine later...
   def singlize
-    self[-1] == "s" ? self[0...-1] : self
+    if self[-2] == 'e' && self[-1] == 's'
+      return self[0...-2]
+    else
+      if self[-1] == 's'
+        return self[0...-1]
+      else
+        return self
+      end
+    end
   end
 
 end
